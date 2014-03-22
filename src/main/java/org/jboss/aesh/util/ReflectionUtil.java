@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
  */
 public class ReflectionUtil {
 
+    @SuppressWarnings("unchecked")
     public static <T> T newInstance(final Class<T> clazz) {
         if(clazz.isAnonymousClass()) {
             throw new RuntimeException("Can not create new instance of an anonymous class");
@@ -39,6 +40,7 @@ public class ReflectionUtil {
         throw new RuntimeException("Could not instantiate class: "+clazz+", no access to constructors.");
     }
 
+    @SuppressWarnings("rawtypes")
     private static <T> T instantiateWithConstructor(Constructor<T> constructor) {
             if(constructor.getParameterTypes().length == 0) {
                 if(Modifier.isPrivate( constructor.getModifiers()) ||
@@ -79,6 +81,7 @@ public class ReflectionUtil {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     private static Constructor getConstructorWithNoParams(Class clazz) {
         for(Constructor constructor : clazz.getConstructors()) {
             if(constructor.getParameterTypes().length == 0) {

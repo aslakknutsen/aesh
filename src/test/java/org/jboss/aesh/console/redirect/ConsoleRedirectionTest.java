@@ -12,6 +12,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jboss.aesh.console.BaseConsoleTest;
 import org.jboss.aesh.console.Config;
@@ -28,15 +29,26 @@ import org.junit.Test;
 
      @Test
      public void pipeCommands() throws Throwable {
-         invokeTestConsole(new Setup() {
-             @Override
-             public void call(Console console, OutputStream out) throws IOException {
-                 out.write(("ls | find *. -print" + Config.getLineSeparator()).getBytes());
-             }
-         }, new RedirectionConsoleCallback());
+         final AtomicInteger count = new AtomicInteger();
+         console()
+             .numberOfCommands(2)
+             .when((console, out) -> {
+                 out.write(("ls | find *. -print"+Config.getLineSeparator()).getBytes());
+             })
+             .then((console, op) -> {
+                 if(count.get() == 0) {
+                     assertEquals("ls ", op.getBuffer());
+                     count.incrementAndGet();
+                 }
+                 else if(count.get() == 1) {
+                     assertEquals(" find *. -print", op.getBuffer());
+                 }
+                 return 0;
+             })
+             .prove();
      }
 
-     @Test
+     @Test @Ignore
      public void redirectionCommands() throws Throwable {
          invokeTestConsole(new Setup() {
              @Override
@@ -50,8 +62,7 @@ import org.junit.Test;
          }, new RedirectionConsoleCallback());
      }
 
-     @Test
-     @Ignore
+     @Test @Ignore
      public void redirectIn() throws Throwable {
          invokeTestConsole(new Setup() {
                                @Override
@@ -81,8 +92,7 @@ import org.junit.Test;
          );
      }
 
-     @Test
-     @Ignore
+     @Test @Ignore
      public void redirectIn2() throws Throwable {
          invokeTestConsole(2, new Setup() {
                      @Override

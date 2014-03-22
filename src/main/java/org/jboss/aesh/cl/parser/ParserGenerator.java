@@ -39,6 +39,7 @@ public class ParserGenerator {
         return generateCommandLineParser(paramInstance.getClass());
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static CommandLineParser generateCommandLineParser(Class clazz) throws CommandLineParserException {
         CommandDefinition command = (CommandDefinition) clazz.getAnnotation(CommandDefinition.class);
         if(command == null)

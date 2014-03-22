@@ -133,4 +133,48 @@ public abstract class BaseConsoleTest {
     public interface Verify {
         int call(Console console, ConsoleOperation op) throws Exception;
     }
+    
+    public ConsoleTestBuilder console() {
+        return new ConsoleTestBuilder();
+    }
+    
+    public class ConsoleTestBuilder {
+        private SettingsBuilder builder;
+        private Verify verify;
+        private Setup setup;
+        
+        private int callbackCount = 1;
+        private int wait = 200;
+        
+        ConsoleTestBuilder() { }
+        
+        public ConsoleTestBuilder given(SettingsBuilder builder) {
+            this.builder = builder;
+            return this;
+        }
+        
+        public ConsoleTestBuilder when(Setup setupt) {
+            this.setup = setupt;
+            return this;
+        }
+
+        public ConsoleTestBuilder then(Verify verify) {
+            this.verify = verify;
+            return this;
+        }
+        
+        public ConsoleTestBuilder numberOfCommands(int callbackCount) {
+            this.callbackCount = callbackCount;
+            return this;
+        }
+
+        public ConsoleTestBuilder wait(int wait) {
+            this.wait = wait;
+            return this;
+        }
+        
+        public void prove() throws Exception {
+            BaseConsoleTest.this.invokeTestConsole(callbackCount, setup, verify, builder);
+        }
+    }
 }

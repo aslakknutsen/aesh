@@ -69,6 +69,7 @@ public class AliasManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void persist() throws IOException {
         if(persistAlias && aliasFile != null) {
             //just do it easily and remove the current file

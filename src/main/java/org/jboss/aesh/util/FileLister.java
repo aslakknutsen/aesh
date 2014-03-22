@@ -39,6 +39,7 @@ public class FileLister {
     private String rest;
     private String lastDir;
     private FileFilter fileFilter;
+    @SuppressWarnings("rawtypes")
     private Comparator fileComparator;
 
     public FileLister(String token, File cwd) {
@@ -51,6 +52,7 @@ public class FileLister {
         findRestAndLastDir();
         setFileFilter(Filter.ALL);
     }
+    @SuppressWarnings("rawtypes")
     public FileLister(String token, File cwd, Comparator comparator) {
         this(token, cwd);
         this.fileComparator = comparator;
@@ -61,6 +63,7 @@ public class FileLister {
         setFileFilter(filter);
     }
 
+    @SuppressWarnings("rawtypes")
     public FileLister(String token, File cwd, Filter filter, Comparator fileComparator) {
         this(token, cwd, filter);
         this.fileComparator = fileComparator;
@@ -71,6 +74,7 @@ public class FileLister {
         this.fileFilter = fileFilter;
     }
 
+    @SuppressWarnings("rawtypes")
     public FileLister(String token, File cwd, FileFilter fileFilter, Comparator fileComparator) {
         this(token, cwd, fileFilter);
         this.fileComparator = fileComparator;
@@ -366,6 +370,7 @@ public class FileLister {
         return token.lastIndexOf(Config.getPathSeparator()) == token.length()-1;
     }
 
+    @SuppressWarnings("unchecked")
     private List<String> listDirectory(File path, String rest) {
         List<String> fileNames = new ArrayList<String>();
         if(path != null && path.isDirectory()) {
